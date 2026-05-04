@@ -243,6 +243,8 @@
   border-radius: 20px;
   overflow: hidden;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-img-wrapper {
@@ -264,15 +266,23 @@
   transform: scale(1.1);
 }
 
+.product-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
 .product-info h3 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
 }
 
 .product-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto; /* Push to bottom */
   margin-bottom: 1rem;
 }
 
