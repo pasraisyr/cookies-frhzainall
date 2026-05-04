@@ -11,10 +11,75 @@ import { Instagram, Whatsapp, Home3, Call} from "iconsax-reactjs";
 import "./App.css";
 import products from "./data/product.json";
 
+const ProductCard = ({ product, quantity, onUpdateQuantity }: { product: any, quantity: number, onUpdateQuantity: (qty: number) => void }) => {
+  return (
+    <div className="product-card glass">
+      <div className="product-img-wrapper">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="product-img"
+        />
+      </div>
+      <div className="product-info">
+        <h3>{product.name}</h3>
+        <div className="product-meta">
+          <span className="price">{product.price}</span>
+        </div>
+        <div className="quantity-selector" style={{ marginTop: 'auto' }}>
+          <button onClick={() => onUpdateQuantity(Math.max(0, quantity - 1))} className="qty-btn">-</button>
+          <span className="qty-display">{quantity}</span>
+          <button onClick={() => onUpdateQuantity(quantity + 1)} className="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
   const [activeTab, setActiveTab] = useState("home");
+  const [cart, setCart] = useState<{ [productId: number]: number }>({});
+
   const whatsappUrl =
-    "https://wa.me/601139795752?text=Hi%20FRH%20Bakery,%20I%20would%20like%20to%20place%20an%20order!";
+    "https://wa.me/601139795752?text=Hi%20Frhzainal%20Bakery,%20I%20would%20like%20to%20place%20an%20order!";
+
+  const updateCart = (productId: number, quantity: number) => {
+    setCart((prev) => {
+      const newCart = { ...prev };
+      if (quantity <= 0) {
+        delete newCart[productId];
+      } else {
+        newCart[productId] = quantity;
+      }
+      return newCart;
+    });
+  };
+
+  const getCombinedWhatsappUrl = () => {
+    const selectedItems = products.filter((p) => cart[p.id]);
+    if (selectedItems.length === 0) return whatsappUrl;
+
+    let text = "Hi Frhzainal Bakery, I would like to place an order for:\n\n";
+    let total = 0;
+
+    selectedItems.forEach((p) => {
+      const qty = cart[p.id];
+      text += `- ${qty}x ${p.name}\n`;
+      
+      const priceMatch = p.price.match(/RM\s*([0-9.]+)/);
+      if (priceMatch) {
+        const priceVal = parseFloat(priceMatch[1]);
+        if (!isNaN(priceVal)) {
+          total += priceVal * qty;
+        }
+      }
+    });
+
+    text += `\nTotal Estimated Price: RM ${total.toFixed(2)}`;
+    return `https://wa.me/601139795752?text=${encodeURIComponent(text)}`;
+  };
+
+  const totalItems = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -32,29 +97,12 @@ const App = () => {
             </div>
             <div className="product-grid">
               {products.map((product) => (
-                <div key={product.id} className="product-card glass">
-                  <div className="product-img-wrapper">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="product-img"
-                    />
-                  </div>
-                  <div className="product-info">
-                    <h3>{product.name}</h3>
-                    <div className="product-meta">
-                      <span className="price">{product.price}</span>
-                    </div>
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-secondary-full"
-                    >
-                      Order
-                    </a>
-                  </div>
-                </div>
+                <ProductCard 
+                  key={product.id} 
+                  product={product} 
+                  quantity={cart[product.id] || 0}
+                  onUpdateQuantity={(qty) => updateCart(product.id, qty)}
+                />
               ))}
             </div>
           </motion.div>
@@ -72,18 +120,46 @@ const App = () => {
               <h2 className="section-title">Sweet Notes</h2>
             </div>
             <div className="glass notes-card">
-              <h3>Our Promise</h3>
-              <p>
-                We believe every cake tells a story. Our bakery uses only 100%
-                natural ingredients, zero preservatives, and a whole lot of
-                love.
-              </p>
-              <div className="note-item">
-                <strong>Pre-order:</strong> Please order at least 2 days in
-                advance.
+              <h3>🍰 Terms & Conditions</h3>
+              <div className="note-item" style={{ marginTop: '0.5rem', paddingTop: '0.5rem' }}>
+                <ul style={{ paddingLeft: '1.2rem', margin: 0, lineHeight: '1.6' }}>
+                  <li>Pre-order required (2–5 days in advance)</li>
+                  <li>Limited slots available — first come, first served</li>
+                </ul>
               </div>
-              <div className="note-item">
-                <strong>Delivery:</strong> We deliver within Klang Valley area.
+
+              <h3 style={{ marginTop: '1.5rem' }}>💳 Payment</h3>
+              <div className="note-item" style={{ marginTop: '0.5rem', paddingTop: '0.5rem' }}>
+                <ul style={{ paddingLeft: '1.2rem', margin: 0, lineHeight: '1.6' }}>
+                  <li>Deposit required to secure order (non-refundable)</li>
+                  <li>Full payment before pickup/delivery</li>
+                </ul>
+              </div>
+
+              <h3 style={{ marginTop: '1.5rem' }}>🎂 Custom Orders</h3>
+              <div className="note-item" style={{ marginTop: '0.5rem', paddingTop: '0.5rem' }}>
+                <ul style={{ paddingLeft: '1.2rem', margin: 0, lineHeight: '1.6' }}>
+                  <li>Fully handcrafted with care</li>
+                  <li>Final design may vary slightly (artisanal finish)</li>
+                  <li>Last-minute changes may incur additional charges</li>
+                </ul>
+              </div>
+
+              <h3 style={{ marginTop: '1.5rem' }}>🚚 Collection</h3>
+              <div className="note-item" style={{ marginTop: '0.5rem', paddingTop: '0.5rem' }}>
+                <ul style={{ paddingLeft: '1.2rem', margin: 0, lineHeight: '1.6' }}>
+                  <li>Self-pickup (By appointment only)</li>
+                  <li>Delivery can be arranged upon request (Lalamove or Grab)</li>
+                  <li>Please arrive on time as scheduled.</li>
+                </ul>
+              </div>
+
+              <h3 style={{ marginTop: '1.5rem' }}>⚠️ Note</h3>
+              <div className="note-item" style={{ marginTop: '0.5rem', paddingTop: '0.5rem' }}>
+                <ul style={{ paddingLeft: '1.2rem', margin: 0, lineHeight: '1.6' }}>
+                  <li>Kindly inform us of any allergies</li>
+                  <li>No last-minute cancellations</li>
+                </ul>
               </div>
             </div>
           </motion.div>
@@ -218,13 +294,13 @@ const App = () => {
             <img src="/sticker.png" alt="Logo" className="nav-logo" />
           </div>
           <a
-            href={whatsappUrl}
+            href={totalItems > 0 ? getCombinedWhatsappUrl() : whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-order-nav"
           >
             <MessageCircle size={18} />
-            <span>Order Now</span>
+            <span>{totalItems > 0 ? `Checkout (${totalItems})` : "Order Now"}</span>
           </a>
         </div>
       </nav>

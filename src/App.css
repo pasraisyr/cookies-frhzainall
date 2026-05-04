@@ -975,3 +975,87 @@
   object-fit: contain;
   transform: scale(1.6); /* Large scale to crop whitespace */
 }
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  background: var(--bg-soft);
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+.qty-btn {
+  background: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--primary);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.qty-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.qty-display {
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Floating Checkout Banner */
+.floating-checkout {
+  position: fixed;
+  bottom: 80px; /* Above persistent nav */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  z-index: 99;
+}
+
+.btn-checkout-float {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--primary);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-checkout-float:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+  background: var(--accent);
+  color: white;
+}
+
+.checkout-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-count {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.checkout-text {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
