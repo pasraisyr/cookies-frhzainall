@@ -233,7 +233,7 @@ const App = () => {
             <div className="glass address-card">
               <div className="address-icon"><MapPin size={48} /></div>
               <h3>Visit Us</h3>
-              <p>Blok H-3-1, Kompleks Kediaman Kakitangan Awam (CIQ),<br />Tg Kupang, 81560 Gelang Patah,<br />Johor, Malaysia.</p>
+              <p>Kompleks Kediaman Kakitangan Awam (CIQ),<br />Tg Kupang, 81560 Gelang Patah,<br />Johor, Malaysia.</p>
               <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="btn-primary-lg" style={{ marginTop: '1.5rem' }}>
                 Open in Google Maps
               </a>
