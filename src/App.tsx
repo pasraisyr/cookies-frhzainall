@@ -8,6 +8,7 @@ import {
   AtSign,
 } from "lucide-react";
 import { Instagram, Whatsapp, Home3, Call} from "iconsax-reactjs";
+import { SiTiktok } from "react-icons/si";
 import "./App.css";
 import products from "./data/product.json";
 
@@ -201,9 +202,7 @@ const App = () => {
                 rel="noopener noreferrer"
                 className="contact-card glass"
               >
-                <div className="contact-icon-img-wrapper">
-                  <img src="/tiktok.png" alt="TikTok" className="contact-icon-img" />
-                </div>
+                <SiTiktok size={32} />
                 <span>TikTok</span>
               </a>
               <a
